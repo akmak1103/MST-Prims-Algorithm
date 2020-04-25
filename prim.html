@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <script src="calculate.js"></script>
+    <title>Prim's Algorithm</title>
+</head>
+
+<body>
+    <br>
+    <br>
+    <div class="container text-center bg-primary" style="color:white;border-radius: 25px">
+        <br>
+        <h1>Prim's Algorithm</h1>
+        <br>
+    </div>
+    <br>
+    <br>
+    <div class="container">
+        <div class="input-group">
+            <input type="number" id="vertices" class="form-control"
+                placeholder="Enter the number of vertices in your graph">
+            <div class="input-group-append" id="button-addon4">
+                <button class="btn btn-outline-primary" id="button" type="button">Submit</button>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="container table-responsive fixed-table-body" id="table" style="visibility: hidden;">
+        <table class="table">
+            <thead>
+                <tr id="table_headers">
+                </tr>
+            </thead>
+            <tbody id="table_body">
+            </tbody>
+        </table>
+        <button class="btn btn-block btn-light" id="process">Process</button>
+    </div>
+    <script>
+
+        var vertices = 0;
+        var array = [];
+        var graph = [];
+
+        $("#button").on('click', function (create_matrix) {
+            remove_old_table();
+            var th = document.createElement("th");
+            vertices = document.getElementById("vertices").value;
+            th.innerHTML = "#";
+            $("#table_headers").append(th);
+            for (let index = 0; index < vertices; index++) {
+                var header = document.createElement("th");
+                header.innerHTML = index;
+                $("#table_headers").append(header);
+                var row = document.createElement("tr");
+                th = document.createElement("th");
+                th.innerHTML = index;
+                row.append(th);
+                for (let i = 0; i < vertices; i++) {
+                    td = document.createElement("td");
+                    if (!(index == i))
+                        td.innerHTML = "<input placeholder=\"Value\" type=\"Number\" id=\"" + index + "" + i + "\">"
+                    else
+                        td.innerHTML = "<input value=0 type=\"Number\" disabled id=\"" + index + "" + i + "\">"
+                    row.append(td);
+                }
+                $("#table_body").append(row);
+            }
+            $("#table").css("visibility", "visible");
+        })
+
+        function remove_old_table() {
+            $("#table_body").html("");
+            $("#table_headers").html("");
+        }
+
+        $("#process").on('click', function (process) {
+            array = [];
+            graph = [];
+            for (let i = 0; i < vertices; i++) {
+                for (let j = 0; j < vertices; j++) {
+                    index = "" + i + "" + j;
+                    array.push(document.getElementById(index).value);
+                }
+                graph.push(array);
+                array = [];
+            }
+            main(graph, vertices, display_MST);
+        })
+
+        function display_MST(parent, graph) {
+            remove_old_table();
+            var th = document.createElement("th");
+            th.innerHTML = "#";
+            $("#table_headers").append(th);
+            var header1 = document.createElement("th");
+            header1.innerHTML = "Edge";
+            var header2 = document.createElement("th");
+            header2.innerHTML = "Weight";
+            $("#table_headers").append(header1);
+            $("#table_headers").append(header2);
+            for (let index = 1; index < parent.length; index++) {
+                var row = document.createElement("tr");
+                th = document.createElement("th");
+                th.innerHTML = index;
+                row.append(th);
+                td = document.createElement("td");
+                td.innerHTML = parent[index] + ' - ' + index;
+                row.append(td);
+                td = document.createElement("td");
+                td.innerHTML = graph[index][parent[index]];
+                row.append(td);
+                $("#table_body").append(row);
+            }
+        }
+
+    </script>
+</body>
+
+</html>
